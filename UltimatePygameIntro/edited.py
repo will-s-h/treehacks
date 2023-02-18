@@ -59,10 +59,17 @@ class Obstacle(pygame.sprite.Sprite):
 		super().__init__()
 		
 		if type == 'fly':
-			fly_1 = pygame.image.load('graphics/fly/fly1.png').convert_alpha()
-			fly_2 = pygame.image.load('graphics/fly/fly2.png').convert_alpha()
+            fly_1 = pygame.image.load('graphics/fly/fly1.png').convert_alpha()
+            fly_2 = pygame.image.load('graphics/fly/fly2.png').convert_alpha()
 			self.frames = [fly_1,fly_2]
 			y_pos = 210
+   
+        else if (type == 'dragon'):
+            dragon_1 = pygame.image.load('graphics/fly/fly1.png').convert_alpha()
+            dragon_2 = pygame.image.load('graphics/fly/fly1.png').convert_alpha()
+            self.frames = [fly_1, fly_2]
+            y_pos = 200
+           
 		else:
 			snail_1 = pygame.image.load('graphics/snail/snail1.png').convert_alpha()
 			snail_2 = pygame.image.load('graphics/snail/snail2.png').convert_alpha()
