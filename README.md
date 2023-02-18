@@ -1,3 +1,3 @@
 # treehacks
 
-treehacks 2023 repo.
+treehacks 2023 repo. group members: William Huang, Sheden Andemicael, Charlie Abowd, Jin Wong.
