@@ -113,40 +113,11 @@ def display_score():
     screen.blit(score_surf,score_rect)
     return current_time
 
-def obstacle_movement(obstacle_list):
-    if obstacle_list:
-        for obstacle_rect in obstacle_list:
-            obstacle_rect.x -= 5
-
-            if obstacle_rect.bottom == 300: screen.blit(snail_surf,obstacle_rect)
-            else: screen.blit(fly_surf,obstacle_rect)
-
-        obstacle_list = [obstacle for obstacle in obstacle_list if obstacle.x > -100]
-
-        return obstacle_list
-    else: return []
-
-def collisions(player,obstacles):
-    if obstacles:
-        for obstacle_rect in obstacles:
-            if player.colliderect(obstacle_rect): return False
-    return True
-
 def collision_sprite():
     if pygame.sprite.spritecollide(player.sprite,obstacle_group,False):
         obstacle_group.empty()
         return False
     else: return True
-
-def player_animation():
-    global player_surf, player_index
-
-    if player_rect.bottom < 300:
-        player_surf = player_jump
-    else:
-        player_index += 0.1
-        if player_index >= len(player_walk):player_index = 0
-        player_surf = player_walk[int(player_index)]
 
 pygame.init()
 screen = pygame.display.set_mode((800,400))
@@ -214,11 +185,11 @@ game_message_rect = game_message.get_rect(center = (400,370))
 obstacle_timer = pygame.USEREVENT + 1
 pygame.time.set_timer(obstacle_timer,1500)
 
-snail_animation_timer = pygame.USEREVENT + 2
-pygame.time.set_timer(snail_animation_timer,500)
+# snail_animation_timer = pygame.USEREVENT + 2
+# pygame.time.set_timer(snail_animation_timer,500)
 
-fly_animation_timer = pygame.USEREVENT + 3
-pygame.time.set_timer(fly_animation_timer,200)
+# fly_animation_timer = pygame.USEREVENT + 3
+# pygame.time.set_timer(fly_animation_timer,200)
 
 # custom code
 pygame.key.set_repeat(500, 25)
@@ -268,15 +239,15 @@ while True:
             if event.type == obstacle_timer:
                 obstacle_group.add(Obstacle(choice(['fly','snail','snail','snail'])))
 
-            if event.type == snail_animation_timer:
-                if snail_frame_index == 0: snail_frame_index = 1
-                else: snail_frame_index = 0
-                snail_surf = snail_frames[snail_frame_index] 
+            # if event.type == snail_animation_timer:
+            #     if snail_frame_index == 0: snail_frame_index = 1
+            #     else: snail_frame_index = 0
+            #     snail_surf = snail_frames[snail_frame_index] 
 
-            if event.type == fly_animation_timer:
-                if fly_frame_index == 0: fly_frame_index = 1
-                else: fly_frame_index = 0
-                fly_surf = fly_frames[fly_frame_index] 
+            # if event.type == fly_animation_timer:
+            #     if fly_frame_index == 0: fly_frame_index = 1
+            #     else: fly_frame_index = 0
+            #     fly_surf = fly_frames[fly_frame_index] 
 
 
     if game_active:
