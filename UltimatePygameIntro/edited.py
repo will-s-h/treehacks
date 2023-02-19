@@ -140,9 +140,6 @@ obstacle_group = pygame.sprite.Group()
 sky_surface = pygame.image.load('./graphics/Sky.png').convert()
 ground_surface = pygame.image.load('./graphics/ground.png').convert()
 
-# score_surf = test_font.render('My game', False, (64,64,64))
-# score_rect = score_surf.get_rect(center = (400,50))
-
 # Snail 
 snail_frame_1 = pygame.image.load('./graphics/snail/snail1.png').convert_alpha()
 snail_frame_2 = pygame.image.load('./graphics/snail/snail2.png').convert_alpha()
@@ -156,9 +153,6 @@ fly_frame2 = pygame.image.load('./graphics/fly/fly2.png').convert_alpha()
 fly_frames = [fly_frame1, fly_frame2]
 fly_frame_index = 0
 fly_surf = fly_frames[fly_frame_index]
-
-obstacle_rect_list = []
-
 
 player_walk_1 = pygame.image.load('./graphics/player/player_walk_1.png').convert_alpha()
 player_walk_2 = pygame.image.load('./graphics/player/player_walk_2.png').convert_alpha()
@@ -184,12 +178,6 @@ game_message_rect = game_message.get_rect(center = (400,370))
 # Timer 
 obstacle_timer = pygame.USEREVENT + 1
 pygame.time.set_timer(obstacle_timer,1500)
-
-# snail_animation_timer = pygame.USEREVENT + 2
-# pygame.time.set_timer(snail_animation_timer,500)
-
-# fly_animation_timer = pygame.USEREVENT + 3
-# pygame.time.set_timer(fly_animation_timer,200)
 
 # custom code
 pygame.key.set_repeat(500, 25)
@@ -221,6 +209,7 @@ while True:
             # force quit to next level                            
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 game_active = False
+                for obstacle in obstacle_group: obstacle.kill()
                 if level < len(levels.texts) - 1 and score >= levels.reqs[level]: level += 1
             
         else:
@@ -239,16 +228,6 @@ while True:
             if event.type == obstacle_timer:
                 obstacle_group.add(Obstacle(choice(['fly','snail','snail','snail'])))
 
-            # if event.type == snail_animation_timer:
-            #     if snail_frame_index == 0: snail_frame_index = 1
-            #     else: snail_frame_index = 0
-            #     snail_surf = snail_frames[snail_frame_index] 
-
-            # if event.type == fly_animation_timer:
-            #     if fly_frame_index == 0: fly_frame_index = 1
-            #     else: fly_frame_index = 0
-            #     fly_surf = fly_frames[fly_frame_index] 
-
 
     if game_active:
         screen.blit(sky_surface,(0,0))
@@ -264,6 +243,7 @@ while True:
         # collision detection
         game_active = collision_sprite()
         if not game_active: # if killed, move to next level
+            for obstacle in obstacle_group: obstacle.kill()
             if level < len(levels.texts) - 1 and score >= levels.reqs[level]: level += 1
             
 		# escape text
@@ -294,7 +274,6 @@ while True:
             game_message_rect = game_message.get_rect(center = (750,370))
             screen.blit(game_message, game_message_rect)
 
-        obstacle_rect_list.clear()
         player_rect.midbottom = (80,300)
         player_gravity = 0
 
