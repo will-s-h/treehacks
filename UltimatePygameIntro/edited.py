@@ -3,8 +3,6 @@ from sys import exit
 import levels
 import textbox
 from random import randint, choice
-import PIL
-from PIL import Image
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -113,11 +111,10 @@ class Obstacle(pygame.sprite.Sprite):
 			if self.rect.x <= 250 and self.rect.x >= 180:
 				self.image = self.frames[1]
 				self.rect.y = 200
-			#if self.rect.x < 180 and self.rect.x >= 175:
-			#	self.image = self.frames[0]
-			#	self.rect.y = 320
 		elif self.animation_index >= len(self.frames):
 			self.animation_index = 0
+			self.image = self.frames[0]
+		else:
 			self.image = self.frames[int(self.animation_index)]
 
 	def update(self):
