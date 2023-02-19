@@ -1,6 +1,9 @@
 import pygame
 from sys import exit
+import text
+import textbox
 from random import randint, choice
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -152,9 +155,11 @@ screen = pygame.display.set_mode((800,400))
 pygame.display.set_caption('Runner')
 clock = pygame.time.Clock()
 test_font = pygame.font.Font('./font/Pixeltype.ttf', 50)
+initial_screen = True
 game_active = False
 start_time = 0
 score = 0
+text_counter = 0
 bg_music = pygame.mixer.Sound('./audio/music.wav')
 bg_music.play(loops = -1)
 
@@ -205,7 +210,7 @@ player_stand_rect = player_stand.get_rect(center = (400,200))
 game_name = test_font.render('Pixel Runner',False,(111,196,169))
 game_name_rect = game_name.get_rect(center = (400,80))
 
-game_message = test_font.render('Press esc to run',False,(111,196,169))
+game_message = test_font.render('PLAY',False,(111,196,169))
 game_message_rect = game_message.get_rect(center = (400,330))
 
 # Timer 
@@ -218,80 +223,89 @@ pygame.time.set_timer(snail_animation_timer,500)
 fly_animation_timer = pygame.USEREVENT + 3
 pygame.time.set_timer(fly_animation_timer,200)
 
-import textbox
-code = textbox.TextInputBox(x=10, y=10, 
-                            font_family="monospace", font_size=20, max_width=780, max_height=380)
+code = textbox.TextInputBox(x=10, y=10, font_family="monospace", font_size=20, max_width=780, max_height=380)
 
-while True: 
-    events = pygame.event.get()
-    if not game_active: code.update(events)
-    
-    for event in events:
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()
-        
-        if game_active:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if player_rect.collidepoint(event.pos) and player_rect.bottom >= 300: 
-                    player_gravity = -20
-            
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and player_rect.bottom >= 300:
-                    player_gravity = -20
-            
-        else:
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                game_active = True
-                start_time = int(pygame.time.get_ticks() / 1000)
-                player.update(obstacle_group, string=code.get_text())
+while True:
+	events = pygame.event.get()
 
-        if game_active:
-            if event.type == obstacle_timer:
-                obstacle_group.add(Obstacle(choice(['fly','snail','snail','snail'])))
+	# allows typing in text box
+	if not game_active and not initial_screen: 
+		code.update(events)
+	
+	for event in events:
+		if event.type == pygame.QUIT:
+			pygame.quit()
+			exit()
+		
+		if game_active:
+			if event.type == pygame.MOUSEBUTTONDOWN:
+				if player_rect.collidepoint(event.pos) and player_rect.bottom >= 300: 
+					player_gravity = -20
+			
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_SPACE and player_rect.bottom >= 300:
+					player_gravity = -20
+			
+		else:
+			# click play button
+			if event.type == pygame.MOUSEBUTTONDOWN:
+				if event.pos[0] in range(game_message_rect.centerx - game_message_rect.width // 2, game_message_rect.centerx + game_message_rect.width // 2) and \
+				   event.pos[1] in range(game_message_rect.centery - game_message_rect.height // 2, game_message_rect.centery + game_message_rect.height // 2):
+					game_active = True
+					start_time = int(pygame.time.get_ticks() / 1000)
+          player.update(obstacle_group, string=code.get_text())
 
-            if event.type == snail_animation_timer:
-                if snail_frame_index == 0: snail_frame_index = 1
-                else: snail_frame_index = 0
-                snail_surf = snail_frames[snail_frame_index] 
+		if game_active:
+			if event.type == obstacle_timer:
+				obstacle_group.add(Obstacle(choice(['fly','fly','fly','fly'])))
 
-            if event.type == fly_animation_timer:
-                if fly_frame_index == 0: fly_frame_index = 1
-                else: fly_frame_index = 0
-                fly_surf = fly_frames[fly_frame_index] 
+			if event.type == snail_animation_timer:
+				if snail_frame_index == 0: snail_frame_index = 1
+				else: snail_frame_index = 0
+				snail_surf = snail_frames[snail_frame_index] 
+
+			if event.type == fly_animation_timer:
+				if fly_frame_index == 0: fly_frame_index = 1
+				else: fly_frame_index = 0
+				fly_surf = fly_frames[fly_frame_index] 
 
 
-    if game_active:
-        screen.blit(sky_surface,(0,0))
-        screen.blit(ground_surface,(0,300))
-        score = display_score()
-        
-        player.draw(screen)
-        player.update(obstacle_group)
+	if game_active:
+		initial_screen = False
+		screen.blit(sky_surface,(0,0))
+		screen.blit(ground_surface,(0,300))
+		score = display_score()
+		
+		player.draw(screen)
+		player.update(obstacle_group)
 
-        obstacle_group.draw(screen)
-        obstacle_group.update()
+		obstacle_group.draw(screen)
+		obstacle_group.update()
 
-        # collision 
-        game_active = collision_sprite()
-        
-    else:
-        screen.fill((94,129,162))
-        screen.blit(player_stand,player_stand_rect)
-        
-        # display text
-        code.render(screen)
-  
-        obstacle_rect_list.clear()
-        player_rect.midbottom = (80,300)
-        player_gravity = 0
+		# collision 
+		game_active = collision_sprite()
+		
+	else:
+		screen.fill((94,129,162))
+		if initial_screen:
+			screen.blit(player_stand,player_stand_rect)
 
-        score_message = test_font.render(f'Your score: {score}',False,(111,196,169))
-        score_message_rect = score_message.get_rect(center = (400,330))
-        screen.blit(game_name,game_name_rect)
+			score_message = test_font.render(f'Your score: {score}',False,(111,196,169))
+			score_message_rect = score_message.get_rect(center = (400,330))
+			screen.blit(game_name,game_name_rect)
 
-        if score == 0: screen.blit(game_message,game_message_rect)
-        else: screen.blit(score_message,score_message_rect)
+			screen.blit(game_message,game_message_rect)
+			pygame.draw.rect(screen, (111,196,169), game_message_rect, 2)
+		else:
+			if len(text.text1) > text_counter: 
+				pygame.event.post(pygame.event.Event(pygame.KEYDOWN, key=pygame.K_c, unicode=text.text1[text_counter]))
+				text_counter += 1
+			# display text
+			code.render(screen)
 
-    pygame.display.update()
-    clock.tick(60)
+		obstacle_rect_list.clear()
+		player_rect.midbottom = (80,300)
+		player_gravity = 0
+
+	pygame.display.update()
+	clock.tick(60)
