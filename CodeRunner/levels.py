@@ -1,6 +1,20 @@
 # required score to reach the next level
 reqs = [10, 20, float('inf')]
 
+# enemies in each level
+
+enemies = [
+    ['fly', 'snail'],
+    ['fly', 'snail'],
+    ['fly', 'snail', 'lion', 'dragon']
+]
+
+probabilities = [
+    [0.25, 0.75],
+    [0.25, 0.75],
+    [1/6, 2/6, 2/6, 1/6]
+]
+
 # text input
 texts = ['',
 

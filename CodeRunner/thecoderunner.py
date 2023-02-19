@@ -2,7 +2,7 @@ import pygame
 from sys import exit
 import levels
 import textbox
-from random import randint, choice
+from random import randint, choice, choices
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -248,7 +248,7 @@ while True:
         # add obstacles
         if game_active:
             if event.type == obstacle_timer:
-                obstacle_group.add(Obstacle(choice(['fly','snail','snail','snail'])))
+                obstacle_group.add(Obstacle(choices(levels.enemies[level], levels.probabilities[level])[0]))
 
 
     if game_active:
