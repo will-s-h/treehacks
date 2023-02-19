@@ -76,13 +76,13 @@ class Obstacle(pygame.sprite.Sprite):
 			lion_1 = pygame.image.load('graphics/lion/lion1.png').convert_alpha()
 			lion_2 = pygame.image.load('graphics/lion/lion2.png').convert_alpha()
 			self.frames = [lion_1, lion_2]
-			y_pos = 250
+			y_pos = 320
 
 		else:
 			snail_1 = pygame.image.load('graphics/snail/snail1.png').convert_alpha()
 			snail_2 = pygame.image.load('graphics/snail/snail2.png').convert_alpha()
 			self.frames = [snail_1,snail_2]
-			y_pos  = 300
+			y_pos = 300
 		
 		self.type = type
 		self.animation_index = 0
@@ -92,11 +92,15 @@ class Obstacle(pygame.sprite.Sprite):
 	def animation_state(self):
 		self.animation_index += 0.1
 		if self.type == 'lion':
-			if self.rect.x == 100:
+			if self.rect.x <= 250 and self.rect.x >= 180:
 				self.image = self.frames[1]
-				self.rect.y -= 20
-		elif self.animation_index >= len(self.frames): self.animation_index = 0
-		self.image = self.frames[int(self.animation_index)]
+				self.rect.y = 200
+			#if self.rect.x < 180 and self.rect.x >= 175:
+			#	self.image = self.frames[0]
+			#	self.rect.y = 320
+		elif self.animation_index >= len(self.frames):
+			self.animation_index = 0
+			self.image = self.frames[int(self.animation_index)]
 
 	def update(self):
 		if self.type == 'dragon':
