@@ -1,3 +1,5 @@
 # The Code Runner
+This is our TreeHacks 2023 repo for "The Code Runner", an educational game that teaches users how to code. 
 
-treehacks 2023 repo. group members: William Huang, Sheden Andemicael, Charlie Abowd, Aniket Mahajan.
+## Group members
+William Huang, Sheden Andemicael, Charlie Abowd, Aniket Mahajan.
