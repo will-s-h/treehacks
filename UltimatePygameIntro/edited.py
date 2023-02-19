@@ -211,7 +211,7 @@ game_name = test_font.render('Pixel Runner',False,(111,196,169))
 game_name_rect = game_name.get_rect(center = (400,80))
 
 game_message = test_font.render('PLAY',False,(111,196,169))
-game_message_rect = game_message.get_rect(center = (400,330))
+game_message_rect = game_message.get_rect(center = (400,370))
 
 # Timer 
 obstacle_timer = pygame.USEREVENT + 1
@@ -245,6 +245,9 @@ while True:
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_SPACE and player_rect.bottom >= 300:
 					player_gravity = -20
+                                        
+			if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+				game_active = False
 			
 		else:
 			# click play button
@@ -253,11 +256,11 @@ while True:
 				   event.pos[1] in range(game_message_rect.centery - game_message_rect.height // 2, game_message_rect.centery + game_message_rect.height // 2):
 					game_active = True
 					start_time = int(pygame.time.get_ticks() / 1000)
-          player.update(obstacle_group, string=code.get_text())
+			player.update(obstacle_group, string=code.get_text())
 
 		if game_active:
 			if event.type == obstacle_timer:
-				obstacle_group.add(Obstacle(choice(['fly','fly','fly','fly'])))
+				obstacle_group.add(Obstacle(choice(['fly','snail','snail','snail'])))
 
 			if event.type == snail_animation_timer:
 				if snail_frame_index == 0: snail_frame_index = 1
@@ -295,13 +298,17 @@ while True:
 			screen.blit(game_name,game_name_rect)
 
 			screen.blit(game_message,game_message_rect)
-			pygame.draw.rect(screen, (111,196,169), game_message_rect, 2)
+			# pygame.draw.rect(screen, (111,196,169), game_message_rect, 2)
 		else:
 			if len(text.text1) > text_counter: 
 				pygame.event.post(pygame.event.Event(pygame.KEYDOWN, key=pygame.K_c, unicode=text.text1[text_counter]))
 				text_counter += 1
 			# display text
 			code.render(screen)
+                        
+			game_message = test_font.render('PLAY',False,(111,196,169))
+			game_message_rect = game_message.get_rect(center = (750,370))
+			screen.blit(game_message,game_message_rect)
 
 		obstacle_rect_list.clear()
 		player_rect.midbottom = (80,300)
