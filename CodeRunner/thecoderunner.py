@@ -191,7 +191,7 @@ player_stand = pygame.image.load('./graphics/player/player_stand.png').convert_a
 player_stand = pygame.transform.rotozoom(player_stand,0,2)
 player_stand_rect = player_stand.get_rect(center = (400,200))
 
-game_name = test_font.render('Pixel Runner',False,(111,196,169))
+game_name = test_font.render('Code Runner',False,(111,196,169))
 game_name_rect = game_name.get_rect(center = (400,80))
 
 game_message = test_font.render('PLAY',False,(111,196,169))
