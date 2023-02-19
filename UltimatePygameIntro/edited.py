@@ -294,6 +294,12 @@ while True:
         game_active = collision_sprite()
         if not game_active: # if killed, move to next level
             if level < len(levels.texts) - 1 and score >= levels.reqs[level]: level += 1
+            
+		# escape text
+        if score >= levels.reqs[level]:
+            escape_message = test_font.render("Level Complete: Press Escape to Continue",False,(111,196,169))
+            escape_message_rect = escape_message.get_rect(center = (400,250))
+            screen.blit(escape_message, escape_message_rect)
         
     else:
         screen.fill((94,129,162))
