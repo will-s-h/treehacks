@@ -3,6 +3,8 @@ from sys import exit
 import levels
 import textbox
 from random import randint, choice
+import PIL
+from PIL import Image
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -73,38 +75,61 @@ class Player(pygame.sprite.Sprite):
         self.animation_state()
 
 class Obstacle(pygame.sprite.Sprite):
-    def __init__(self,type):
-        super().__init__()
-        
-        if type == 'fly':
-            fly_1 = pygame.image.load('graphics/fly/fly1.png').convert_alpha()
-            fly_2 = pygame.image.load('graphics/fly/fly2.png').convert_alpha()
-            self.frames = [fly_1,fly_2]
-            y_pos = 210
-        else:
-            snail_1 = pygame.image.load('graphics/snail/snail1.png').convert_alpha()
-            snail_2 = pygame.image.load('graphics/snail/snail2.png').convert_alpha()
-            self.frames = [snail_1,snail_2]
-            y_pos  = 300
+	def __init__(self,type):
+		super().__init__()
+		
+		if type == 'fly':
+			fly_1 = pygame.image.load('graphics/fly/fly1.png').convert_alpha()
+			fly_2 = pygame.image.load('graphics/fly/fly2.png').convert_alpha()
+			self.frames = [fly_1,fly_2]
+			y_pos = 210
 
-        self.type = type
-        self.animation_index = 0
-        self.image = self.frames[self.animation_index]
-        self.rect = self.image.get_rect(midbottom = (randint(900,1100),y_pos))
+		elif type == 'dragon':
+			dragon_1 = pygame.image.load('graphics/dragon/birdsprite.png').convert_alpha()
+			dragon_2 = pygame.image.load('graphics/dragon/birdsprite.png').convert_alpha()
+			self.frames = [dragon_1, dragon_2]
+			y_pos = 200
+		
+		elif type == 'lion':
+			lion_1 = pygame.image.load('graphics/lion/lion1.png').convert_alpha()
+			lion_2 = pygame.image.load('graphics/lion/lion2.png').convert_alpha()
+			self.frames = [lion_1, lion_2]
+			y_pos = 320
 
-    def animation_state(self):
-        self.animation_index += 0.1 
-        if self.animation_index >= len(self.frames): self.animation_index = 0
-        self.image = self.frames[int(self.animation_index)]
+		else:
+			snail_1 = pygame.image.load('graphics/snail/snail1.png').convert_alpha()
+			snail_2 = pygame.image.load('graphics/snail/snail2.png').convert_alpha()
+			self.frames = [snail_1,snail_2]
+			y_pos = 300
+		
+		self.type = type
+		self.animation_index = 0
+		self.image = self.frames[self.animation_index]
+		self.rect = self.image.get_rect(midbottom = (randint(900,1100),y_pos))
 
-    def update(self):
-        self.animation_state()
-        self.rect.x -= 6
-        self.destroy()
+	def animation_state(self):
+		self.animation_index += 0.1
+		if self.type == 'lion':
+			if self.rect.x <= 250 and self.rect.x >= 180:
+				self.image = self.frames[1]
+				self.rect.y = 200
+			#if self.rect.x < 180 and self.rect.x >= 175:
+			#	self.image = self.frames[0]
+			#	self.rect.y = 320
+		elif self.animation_index >= len(self.frames):
+			self.animation_index = 0
+			self.image = self.frames[int(self.animation_index)]
 
-    def destroy(self):
-        if self.rect.x <= -100: 
-            self.kill()
+	def update(self):
+		if self.type == 'dragon':
+			self.rect.x -= 20
+		self.animation_state()
+		self.rect.x -= 6
+		self.destroy()
+
+	def destroy(self):
+		if self.rect.x <= -100: 
+			self.kill()
 
 def display_score():
     current_time = int(pygame.time.get_ticks() / 1000) - start_time
