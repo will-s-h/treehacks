@@ -4,14 +4,14 @@ reqs = [10, 20, float('inf')]
 # enemies in each level
 
 enemies = [
-    ['fly', 'snail'],
+    ['fly', 'snail', 'lion', 'dragon'],
     ['fly', 'snail'],
     ['fly', 'snail', 'lion', 'dragon']
 ]
 
 probabilities = [
-    [0.25, 0.75],
-    [0.25, 0.75],
+    [1/2, 1/2, 0, 0],
+    [1/4, 3/4],
     [1/6, 2/6, 2/6, 1/6]
 ]
 
